@@ -33,6 +33,9 @@
                         <div class="wiki-toolbar-icon text-success" data-toggle="modal" data-target="#newWiki">
                             <i class="fa fa-plus text-success"></i><span>${_("New")}</span>
                         </div>
+                        <div class="wiki-toolbar-icon text-success" onclick="importNewWikiPage()">
+                          <i class="fa fa-plus text-success"></i><span>${_("Import")}</span>
+                        </div>
                         % if wiki_id and wiki_name != 'home':
                             <div class="wiki-toolbar-icon text-danger" data-toggle="modal" data-target="#deleteWiki">
                                 <i class="fa fa-trash-o text-danger"></i><span>${_("Delete")}</span>
@@ -406,6 +409,22 @@ ${parent.javascript_bottom()}
             public: true,
         },
     });
+
+    function importNewWikiPage() {
+      var wikiName = 'Import New Wiki Page Test';
+      var request = $.ajax({
+          type: 'GET',
+          cache: false,
+          url: ${ urls['api']['base'] | sjson, n } + encodeURIComponent(wikiName) + '/validate/',
+          dataType: 'json'
+      });
+      request.done(function (response) {
+          window.location.href = ${ urls['web']['base'] | sjson, n } + encodeURIComponent(wikiName) + '/edit/';
+      });
+      request.fail(function (response, textStatus, error) {
+          window.alert('error');
+      });
+    }
 
 </script>
 <script src="//${sharejs_url}/text.js"></script>

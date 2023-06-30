@@ -9,6 +9,14 @@
                 </div><!-- end modal-header -->
                 <div class="modal-body">
                     <div class='form-group'>
+                        <div align="left">
+                            <div>
+                                <input type="radio" name="radioPageLevel" value="1" checked />
+                                <label for="same-level">Create pages on the same level</label>
+                                <input type="radio" name="radioPageLevel" value="2"/>
+                                <label for="child-level">create pages on the child level</label>
+                            </div>
+                        </div>
                         <input id="data" placeholder="${_('New Wiki Name')}" type="text" class='form-control'>
                     </div>
                     <p id="alert" class="text-danger"> </p>
@@ -32,6 +40,7 @@
             var $data = $newWikiForm.find('#data');
             var $submitForm = $newWikiForm.find('#add-wiki-submit');
             var $alert = $newWikiForm.find('#alert');
+            var radioPageLevel = $('input[name="radioPageLevel"]:checked').val();
 
             $submitForm
                 .attr('disabled', 'disabled')

@@ -150,6 +150,11 @@ def _wiki_page_content(wname, wver=None, **kwargs):
 @must_be_contributor_or_public
 @must_have_addon('wiki', 'node')
 def wiki_page_content(wname, wver=None, **kwargs):
+    logger.info('--------------------wiki_page_content--------------------')
+    logger.info('wname:' + wname)
+    logger.info('wver:' + str(wver))
+    logger.info('kwargs:' + format(kwargs))
+    logger.info('--------------------wiki_page_content--------------------')
     return _wiki_page_content(wname, wver=wver, **kwargs)
 
 @must_be_valid_project  # injects project
@@ -292,6 +297,11 @@ def project_wiki_view(auth, wname, path=None, **kwargs):
 @must_not_be_registration
 @must_have_addon('wiki', 'node')
 def project_wiki_edit_post(auth, wname, **kwargs):
+    logger.info('--------------------project_wiki_edit_post--------------------')
+    logger.info('auth:' + auth)
+    logger.info('wname:' + wname)
+    logger.info('kwargs:' + format(kwargs))
+    logger.info('--------------------project_wiki_edit_post--------------------')
     node = kwargs['node'] or kwargs['project']
     wiki_name = wname.strip()
     wiki_version = WikiVersion.objects.get_for_node(node, wiki_name)
@@ -311,6 +321,11 @@ def project_wiki_edit_post(auth, wname, **kwargs):
             ret = {'status': 'unmodified'}
     else:
         # Create a wiki
+        logger.info('Create wiki --- create_for_node()パラメータ')
+        logger.info('node:' + format(node))
+        logger.info('wiki_name:' + wiki_name)
+        logger.info('form_wiki_content:' + format(form_wiki_content))
+        logger.info('auth:' + auth)
         WikiPage.objects.create_for_node(node, wiki_name, form_wiki_content, auth)
         ret = {'status': 'success'}
     return ret, http_status.HTTP_302_FOUND, None, redirect_url
@@ -443,6 +458,12 @@ def project_wiki_rename(auth, wname, **kwargs):
 @must_not_be_registration
 @must_have_addon('wiki', 'node')
 def project_wiki_validate_name(wname, auth, node, **kwargs):
+    logger.info('--------------------project_wiki_validate_name()--------------------')
+    logger.info('wname:' + wname)
+    logger.info('auth:' + str(auth))
+    logger.info('node:' + format(vars(node)))
+    logger.info('kwargs:' + format(kwargs))
+
     wiki_name = wname.strip()
     wiki = WikiPage.objects.get_for_node(node, wiki_name)
 
@@ -458,6 +479,11 @@ def project_wiki_validate_name(wname, auth, node, **kwargs):
 @must_be_valid_project
 @must_be_contributor_or_public
 def project_wiki_grid_data(auth, node, **kwargs):
+    logger.info('--------------------project_wiki_grid_data()--------------------')
+    logger.info('auth:' + str(auth))
+    logger.info('node:' + format(vars(node)))
+    logger.info('kwargs:' + format(kwargs))
+    
     pages = []
     project_wiki_pages = {
         'title': 'Project Wiki Pages',
@@ -466,7 +492,7 @@ def project_wiki_grid_data(auth, node, **kwargs):
         'children': format_project_wiki_pages(node, auth)
     }
     pages.append(project_wiki_pages)
-
+    
     component_wiki_pages = {
         'title': 'Component Wiki Pages',
         'kind': 'folder',
@@ -475,6 +501,9 @@ def project_wiki_grid_data(auth, node, **kwargs):
     }
     if len(component_wiki_pages['children']) > 0:
         pages.append(component_wiki_pages)
+
+    logger.info('----------------return grid data---------------')
+    logger.info(format(pages))
 
     return pages
 
@@ -503,6 +532,9 @@ def format_project_wiki_pages(node, auth):
     pages = []
     can_edit = node.has_permission(auth.user, WRITE) and not node.is_registration
     project_wiki_pages = _get_wiki_pages_latest(node)
+    logger.info('----------------format_project_wiki_pages() project_wiki_pages---------------')
+    logger.info(format(project_wiki_pages))
+    
     home_wiki_page = format_home_wiki_page(node)
     pages.append(home_wiki_page)
     for wiki_page in project_wiki_pages:
@@ -517,6 +549,9 @@ def format_project_wiki_pages(node, auth):
             }
             if can_edit or has_content:
                 pages.append(page)
+                
+    logger.info('----------------format_project_wiki_pages return---------------')
+    logger.info(format(pages))
     return pages
 
 

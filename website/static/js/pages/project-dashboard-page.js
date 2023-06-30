@@ -560,6 +560,7 @@ $(document).ready(function () {
                     ];
                 },
                 resolveRows : function (item) {
+                    console.log('item = %o', item);
                     var tb = this;
                     item.css = '';
                     if(tb.isMultiselected(item.id)){

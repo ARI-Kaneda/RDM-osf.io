@@ -43,6 +43,9 @@ function resolveIcon(item) {
 
 function WikiMenu(data, wikiID, canEdit) {
 
+    console.log('-----------------------WikiMenu(data,...) data---------------');
+    console.log('%o', data);
+
     //  Treebeard version
     var tbOptions = {
         divID: 'grid',
@@ -69,6 +72,8 @@ function WikiMenu(data, wikiID, canEdit) {
             }
         },
         resolveRows : function (item){
+            console.log('-----------------------resolveRows---------------');
+            console.log('item = %o', item);
             var tb = this;
             var columns = [];
             if(item.data.type === 'heading') {
